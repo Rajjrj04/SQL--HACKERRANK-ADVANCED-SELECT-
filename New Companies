@@ -1,0 +1,38 @@
+MS SQL:-
+
+solution 1::
+SELECT a.company_code,
+       a.founder,
+       Count(DISTINCT b.lead_manager_code),
+       Count(DISTINCT c.senior_manager_code),
+       Count(DISTINCT d.manager_code),
+       Count(DISTINCT e.employee_code)
+FROM   company a
+       JOIN lead_manager b
+         ON b.company_code = a.company_code
+       JOIN senior_manager c
+         ON c.lead_manager_code = b.lead_manager_code
+       JOIN manager d
+         ON d.senior_manager_code = c.senior_manager_code
+       JOIN employee e
+         ON e.manager_code = d.manager_code
+GROUP  BY 1,
+          2
+ORDER  BY 1; 
+
+
+
+solution 2::
+
+select e.company_code, 
+c.founder, 
+count(distinct e.lead_manager_code),
+count(distinct e.senior_manager_code),
+count(distinct e.manager_code),
+count(distinct e.employee_code)
+from employee e
+join company c
+using(company_code)
+where e.company_code = c.company_code
+group by 1,2
+order by 1;
